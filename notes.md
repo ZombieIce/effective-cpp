@@ -54,5 +54,27 @@
 3. noexcept is particularly valuable for the move operations, swap, memory deallocation functions, and destructors.
 4. Most functions are exception-neutral rather than noexcept.
 #### Item 15: Use constexpr whenever possible
-
-
+1. constexpr objects are const and are initialized with values known
+   during compilation.
+2. constexpr functions can produce compile-time results when called
+   with arguments whose values are known during compilation.
+3. constexpr objects and functions may be used in a wider range of
+   contexts than non-constexpr objects and functions.
+4. constexpr is part of an object's or function's interface.
+#### Item 16: Make const member functions thread safe.
+1. Make const member functions thread safe unless you're certain
+   they'll never be usded in a concurrent context.
+2. Use of std::atomic varibles may offer better performance than a
+   mutex, but they're suited for manipulation of only a single varible
+   or memory location.
+#### Item 17: Understand special member function generation
+1. The special member functions are those compilers may generate on
+   their own; default constructor, destructor, copy operations, and
+   move operations.
+2. Move operations are generated only for classes lacking explicitly
+   declared move operations, copy operations, and a destructor.
+3. The copy constructor is generated only for classes lacking an
+   explicitly declared copy constructor, and it's deleted if a move
+   operation is declared. The copy assignment operator is generated
+   only for classes lacking an explicitly declared copy assignment
+   operator, and it's deleted if a move operation is declared.
