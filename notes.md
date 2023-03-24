@@ -262,3 +262,36 @@ pointer to implementation
    behavior.
 4. Declare std::thread objects last in lists of data members.
 #### Item 38: Be aware of varying thread handle destructor
+1. Future destructors normally just destroy the future's data members.
+2. The final future referring to a shared state for a non-deferred
+   task launched via std::async blocks until the task completes.
+#### Item 39: Consider void futures for one-shot event communication
+1. For simple event communication, condvar-based designs require a superflu‐ ous mutex, impose constraints on the relative progress of detecting and react‐ ing tasks, and require reacting tasks to verify that the event has taken place.
+2. Designs employing a flag avoid those problems, but are based on polling, not blocking.
+3. A condvar and flag can be used together, but the resulting communications mechanism is somewhat stilted.
+4. Using std::promises and futures dodges these issues, but the approach uses heap memory for shared states, and it’s limited to one-shot communication.
+#### Item 40: Use std::atomic for concurrency, volatile for special memory
+1. std::atomic is for data accessed from multiple threads without
+   using mutexes, It's a tool for waiting concurrent software.
+2. volatile is for memory where reads and wriets should not be
+   optimized away. It's tools for working with special memory.
+## Chapter 8 Tweaks
+#### Item 41: Consider pass by value for copyable parameters that are cheap to move and always copied
+1. For copyable, cheap-to-move parameters that are always copied, pass
+   by value may be nearly as efficient as pass by reference, it's
+   easier to implement, and it can generate less object code.
+2. Copying parameters via construction may be significantly more
+   expensive than copying them via assignment.
+3. Pass by value is subject to the slicing problem, so it's typically
+   inappropriate for base class parameter types.
+#### Item 52: Consider emplacement instead of insertion
+1. In principle, emplacement functions should somtimes be more
+   efficient than their insertion counterparts, and they should never
+   be less efficient.
+2. In practice, they're most likely to be faster when (1) the value
+   being added is constructed into the container, not assigned; (2)
+   the argument type(s) passed differ from the type held by the
+   container; and (3) the container won't reject the value being added
+   due to it being a duplicate.
+3. Emplacement functions may perform type conversions that would be
+   rejected by insertion functions.
